@@ -1,0 +1,25 @@
+# Ignore all .venv folders
+.venv/
+**/.venv/
+
+# Ignore Python cache files
+**/__pycache__/
+
+# Ignore log files
+*.log
+
+# Ignore IDE-specific files
+*.pyc
+
+# Ignore specific test and learning files
+testReadMe.md
+test_class_comments.py
+test_class.py
+test.py
+test2.py
+test2_class.py
+learning.py
+learning2.py
+
+
+.idea/
