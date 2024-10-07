@@ -37,7 +37,7 @@ def generate_report(start_date, end_date, filtered_data):
                        f"{start_date.day:02}_to_{end_date.year}_{end_date.month:02}_{end_date.day:02}.xlsx")
 
     # Define the directory to save the report
-    save_directory = "Weekly_Outage_Reports"
+    save_directory = "../Weekly_Outage_Reports"
     os.makedirs(save_directory, exist_ok=True)
 
     # Save the report in the specified directory

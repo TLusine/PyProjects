@@ -90,7 +90,7 @@ class DataProcessor:
 
 def main():
     # Read the input Excel file from the specified sheet "FromDB"
-    df = pd.read_excel('ReportsDB.xlsx', sheet_name='DB_ProblemsDescriptions')
+    df = pd.read_excel('../data/ReportsDB.xlsx', sheet_name='DB_ProblemsDescriptions')
 
     # Process data and generate final rows
     data_processor = DataProcessor(df)

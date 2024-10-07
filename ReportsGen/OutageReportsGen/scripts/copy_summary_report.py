@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-def copy_summary_report(source_filename='ReportsDB.xlsx'):
+def copy_summary_report(source_filename='../data/ReportsDB.xlsx'):
     # Load the data from the existing Excel file
     report_data = pd.read_excel(source_filename, sheet_name='summary_report', header=0)
 
