@@ -23,3 +23,7 @@ learning2.py
 
 
 .idea/
+# Ignore PyInstaller build artifacts
+build/
+dist/
+*.spec
