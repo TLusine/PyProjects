@@ -1,34 +1,45 @@
 import subprocess
 import logging
 import report_builder_gui
+import os
+import sys
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# Run 1st script
-logging.info("\nRunning copy_addresses.py...")
-subprocess.run(['python', 'copy_addresses.py'])
-
-# Run 2nd script
-logging.info("\nRunning address_extensions.py...")
-subprocess.run(['python', 'address_extensions.py'])
+# Get the directory of the current script
+script_dir = os.path.dirname(os.path.abspath(__file__))
+python_executable = sys.executable  # Get the path to the Python interpreter
 
 
-# Run 3rd script
-logging.info("Running problem_descriptions.py...")
-subprocess.run(['python', 'problem_descriptions.py'])
+# Function to run scripts and log their output
+def run_script(script_name):
+    try:
+        logging.info(f"\nRunning {script_name}...")
+        script_path = os.path.join(script_dir, script_name)  # Full path to the script
+        result = subprocess.run([python_executable, script_path],
+                                capture_output=True, text=True)
 
-# Run 4th script
-logging.info("\nRunning U_L_extensions.py...")
-subprocess.run(['python', 'U_L_extensions.py'])
+        # Log stdout and stderr
+        logging.info(result.stdout)
+        logging.error(result.stderr)
 
-# Run 5th script
-logging.info("\nRunning summary_report.py...")
-subprocess.run(['python', 'summary_report.py'])
+    except Exception as e:
+        logging.error(f"Error occurred while running {script_name}: {e}")
 
-# Run 6th script, full copy/paste value DB
-logging.info("\nRunning copy_summary_report.py...")
-subprocess.run(['python', 'copy_summary_report.py'])
+
+# Run all scripts
+scripts = [
+    'copy_addresses.py',
+    'address_extensions.py',
+    'problem_descriptions.py',
+    'U_L_extensions.py',
+    'summary_report.py',
+    'copy_summary_report.py'
+]
+
+for script in scripts:
+    run_script(script)
 
 # Launch GUI for report builder
 logging.info("\nLaunching GUI (report_builder_gui.py)...")
