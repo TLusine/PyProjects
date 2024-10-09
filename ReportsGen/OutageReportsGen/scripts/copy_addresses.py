@@ -1,31 +1,33 @@
-import openpyxl
 import pandas as pd
 
-def copy_addresses(source_filename='../data/ReportsDB.xlsx'):
-    # Load the workbook and the specified sheet
-    workbook = openpyxl.load_workbook(source_filename, data_only=True)
-    sheet = workbook['Addresses']
+# Load the Excel file
+file_path = '../data/ReportsDB.xlsx'
+excel_file = pd.ExcelFile(file_path)
 
-    # Extract the data from the sheet, including header
-    data = []
-    for row in sheet.iter_rows(values_only=True):
-        data.append(row)
+# Read the Addresses sheet
+addresses_df = excel_file.parse('Addresses')
 
-    # Convert the data to a DataFrame
-    df = pd.DataFrame(data[1:], columns=data[0])  # Skip the header
-    # Strip whitespace from column names
-    df.columns = df.columns.str.strip()
+# Create a new DataFrame for the copy_addresses sheet
+copy_addresses_df = pd.DataFrame()
 
-    # Select only the required columns
-    columns_to_keep = ['Site Code', 'Site_Code_Address_rus', 'Site_Code_Address_eng']
+# Populate the Site Code column
+copy_addresses_df['Site Code'] = addresses_df['Site Code']
 
-    # Filter the data to keep only the specified columns
-    filtered_data = df[columns_to_keep]
+# Populate the Site_Code_Address_rus column
+copy_addresses_df['Site_Code_Address_rus'] = (
+    'BTS - ' + addresses_df['Site Code'] + ', ' +
+    addresses_df['rus_1'] + addresses_df['rus_2']
+)
 
-    # Use ExcelWriter to overwrite the data in the 'copy_addresses' sheet
-    with pd.ExcelWriter(source_filename, mode='a', engine='openpyxl', if_sheet_exists='replace') as writer:
-        filtered_data.to_excel(writer, sheet_name='copy_addresses', index=False)
-        print(f"Copied values data to '{source_filename}' successfully in the 'copy_addresses' sheet.")
+# Populate the Site_Code_Address_eng column
+copy_addresses_df['Site_Code_Address_eng'] = (
+    'BTS - ' + addresses_df['Site Code'] + ', ' +
+    addresses_df['eng_1'] + ', ' +
+    addresses_df['eng_2']
+)
 
-if __name__ == "__main__":
-    copy_addresses()
+# Save the results to the copy_addresses sheet in the same Excel file
+with pd.ExcelWriter(file_path, engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
+    copy_addresses_df.to_excel(writer, sheet_name='copy_addresses', index=False)
+
+print("Data copied successfully to 'copy_addresses' sheet.")
